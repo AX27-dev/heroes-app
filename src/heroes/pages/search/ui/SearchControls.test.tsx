@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { SearchControls } from './SearchControls';
 import { MemoryRouter } from 'react-router';
 
@@ -24,12 +24,61 @@ describe('SearchControls', () => {
   test('should render SearchControls with default values', () => {
     const { container } = renderWithRouter();
     expect(container).toMatchSnapshot();
-    // screen.debug();
   });
 
-  test('should set input value wwhen search param name is set', () => {
+  test('should set input value when search param name is set', () => {
+    renderWithRouter(['/?name=Batman']);
+
+    const input = screen.getByPlaceholderText(
+      'Search heroes, villains, powers, teams...'
+    );
+
+    expect(input.getAttribute('value')).toBe('Batman');
+  });
+
+  test('should change params when input is changed and enter is pressed', () => {
+    renderWithRouter(['/?name=Batman']);
+
+    const input = screen.getByPlaceholderText(
+      'Search heroes, villains, powers, teams...'
+    );
+
+    expect(input.getAttribute('value')).toBe('Batman');
+
+    fireEvent.change(input, { target: { value: 'Superman' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(input.getAttribute('value')).toBe('Superman');
+  });
+
+  test('should change params strength when slider change', () => {
+    renderWithRouter(['/?accordion=filters']);
+
+    const slider = screen.getByRole('slider');
+
+    expect(slider.getAttribute('aria-valuenow')).toBe('0');
+
+    fireEvent.keyDown(slider, { key: 'ArrowRight' });
+
+    expect(slider.getAttribute('aria-valuenow')).toBe('1');
+  });
+
+  test('accordion should be opened when accordion param is set', () => {
+    renderWithRouter(['/?accordion=filters']);
+
+    const accordion = screen.getByTestId('accordion');
+
+    const accordionItem = accordion.querySelector('div');
+
+    expect(accordionItem?.getAttribute('data-state')).toBe('open');
+  });
+
+  test('accordion should be closed when accordion param is not set', () => {
     renderWithRouter();
 
-    screen.debug();
+    const accordion = screen.getByTestId('accordion');
+    const accordionItem = accordion.querySelector('div');
+
+    expect(accordionItem?.getAttribute('data-state')).toBe('closed');
   });
 });

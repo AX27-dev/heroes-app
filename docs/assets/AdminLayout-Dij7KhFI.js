@@ -1,0 +1,1 @@
+import{a as o,j as s,O as r}from"./index-BcLxPZxs.js";const l=()=>{const t=o.c(1);let e;return t[0]===Symbol.for("react.memo_cache_sentinel")?(e=s.jsx("div",{className:"bg-purple-500",children:s.jsx(r,{})}),t[0]=e):e=t[0],e};export{l as AdminLayout,l as default};

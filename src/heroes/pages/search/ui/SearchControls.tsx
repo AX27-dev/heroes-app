@@ -93,7 +93,12 @@ export const SearchControls = () => {
       </div>
 
       {/* Advanced Filters */}
-      <Accordion type="single" collapsible value={accordion}>
+      <Accordion
+        type="single"
+        collapsible
+        value={accordion}
+        data-testid="accordion"
+      >
         <AccordionItem value="filters">
           <AccordionContent>
             <div className="bg-white rounded-lg p-6 mb-8 shadow-sm border">
